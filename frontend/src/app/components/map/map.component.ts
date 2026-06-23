@@ -3,10 +3,6 @@ import {
   Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild,
 } from '@angular/core';
 import * as L from 'leaflet';
-// Expone Leaflet como `window.L` ANTES de cargar el plugin. Imprescindible para
-// que el mapa de calor funcione en el build de producción (ver el archivo).
-import './expose-leaflet-global';
-import 'leaflet.heat';
 import { Zone, ZonePrediction } from '../../services/api.service';
 
 @Component({
@@ -40,7 +36,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     [-3.35, -80.85], [-1.65, -79.15],
   );
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
     this.map = L.map(this.mapEl.nativeElement, {
       center: MapComponent.CENTER,
       zoom: 12,
@@ -59,6 +55,18 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     // ante cualquier reflujo del layout recalcula su tamaño en vez de deformarse.
     this.resizeObs = new ResizeObserver(() => this.map?.invalidateSize());
     this.resizeObs.observe(this.mapEl.nativeElement);
+
+    // leaflet.heat es un plugin UMD legado que registra `L.heatLayer` sobre la
+    // variable global `window.L`. En el build de producción (esbuild) Leaflet no
+    // queda como global, por lo que el plugin se aplicaba a otra referencia y
+    // fallaba con "heatLayer is not a function". Fijamos NUESTRA instancia como
+    // global y cargamos el plugin con import() dinámico: así se ejecuta DESPUÉS
+    // (el orden de los imports estáticos no lo garantiza el bundler).
+    (window as unknown as { L: typeof L }).L = L;
+    // leaflet.heat es JS legado sin tipos; del import() dinámico solo nos importa
+    // su efecto secundario (registrar L.heatLayer), no su valor de retorno.
+    // @ts-ignore
+    await import('leaflet.heat');
 
     this.ready = true;
     if (this.predictions.length) this.render();

@@ -13,3 +13,7 @@ declare module 'leaflet' {
     }
   ): Layer;
 }
+
+// Declara el módulo del plugin para poder cargarlo con import() dinámico.
+// Solo tiene efecto secundario (registra L.heatLayer); no exporta nada propio.
+declare module 'leaflet.heat';
