@@ -3,6 +3,9 @@ import {
   Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild,
 } from '@angular/core';
 import * as L from 'leaflet';
+// Expone Leaflet como `window.L` ANTES de cargar el plugin. Imprescindible para
+// que el mapa de calor funcione en el build de producción (ver el archivo).
+import './expose-leaflet-global';
 import 'leaflet.heat';
 import { Zone, ZonePrediction } from '../../services/api.service';
 
