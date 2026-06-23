@@ -1,0 +1,92 @@
+<!-- ── FILTROS ── -->
+<div class="section-title first">Filtros</div>
+<div class="filters">
+
+  <div class="field">
+    <label>Tipo de delito</label>
+    @if (options?.delitos?.length) {
+      <select [(ngModel)]="selectedDelito">
+        <option value="" disabled>— Seleccione un delito —</option>
+        @for (d of options!.delitos; track d.value) {
+          <option [value]="d.value">{{ d.label }}</option>
+        }
+      </select>
+    } @else {
+      <select disabled><option>Cargando…</option></select>
+    }
+  </div>
+
+  <div class="field">
+    <label>Distrito</label>
+    <select [(ngModel)]="selectedDistrito" (ngModelChange)="onDistritoChange()">
+      <option [ngValue]="null">Todos los distritos</option>
+      @for (d of options?.distritos ?? []; track d.value) {
+        <option [ngValue]="d.value">{{ d.label }}</option>
+      }
+    </select>
+  </div>
+
+  @if (selectedDistrito) {
+    <div class="field">
+      <label>Circuito</label>
+      <select [(ngModel)]="selectedCircuito" (ngModelChange)="onCircuitoChange()">
+        <option [ngValue]="null">Todos los circuitos</option>
+        @for (c of circuitosFiltered; track c.value) {
+          <option [ngValue]="c.value">{{ c.label }}</option>
+        }
+      </select>
+    </div>
+  }
+
+  @if (selectedCircuito) {
+    <div class="field">
+      <label>Subcircuito</label>
+      <select [(ngModel)]="selectedSubcircuito">
+        <option [ngValue]="null">Todos los subcircuitos</option>
+        @for (s of subcircuitosFiltered; track s.value) {
+          <option [ngValue]="s.value">{{ s.label }}</option>
+        }
+      </select>
+    </div>
+  }
+
+  <div class="field">
+    <label>Rango horario</label>
+    <select [(ngModel)]="selectedHora">
+      <option [ngValue]="null">— Seleccione una hora —</option>
+      @for (h of options?.rangos_horarios ?? []; track h.value) {
+        <option [ngValue]="h.value">{{ h.label }}</option>
+      }
+    </select>
+  </div>
+
+  @if (validationMsg) {
+    <p class="validation-error">{{ validationMsg }}</p>
+  }
+  <button class="btn-primary"   (click)="apply()" [disabled]="loading">
+    @if (loading) { Procesando… } @else { Actualizar predicción }
+  </button>
+  <button class="btn-secondary" (click)="clear()" [disabled]="loading">Limpiar</button>
+</div>
+
+<!-- ── ZONA EN FOCO ── -->
+<div class="section-title">Zona en foco</div>
+<div class="focus-zone">
+  @if (!focusedZone) {
+    <p class="hint">Desplaza el cursor sobre un área del mapa para ver su detalle.</p>
+  } @else {
+    <div class="focus-name">{{ focusedZone.nombre }}</div>
+    <div class="focus-code">{{ focusedZone.codigo_subcircuito }}</div>
+    @if (focusedZone.parroquia) {
+      <div class="focus-parroquia">
+        <span class="pin">📍</span> {{ focusedZone.parroquia }}
+        @if (focusedZone.es_rural) { <span class="rural-badge">Zona rural</span> }
+      </div>
+    }
+    <div class="focus-row"><span>Gravedad</span><b [style.color]="gravedadColor">{{ focusedZone.gravedad }}</b></div>
+    <div class="focus-row"><span>Peligrosidad</span><b>{{ focusedZone.peligrosidad.toFixed(1) }}%</b></div>
+    <div class="bar-bg">
+      <div class="bar-fill" [style.width.%]="focusedZone.peligrosidad" [style.background]="gravedadColor"></div>
+    </div>
+  }
+</div>

@@ -1,0 +1,110 @@
+<div class="layout">
+
+  <!-- ── TOP BAR ── -->
+  <header class="topbar">
+    <button class="filtros-toggle" (click)="toggleFiltros()" aria-label="Abrir filtros">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+    <div class="brand-left">
+      <div class="avatar">SC</div>
+      <div>
+        <span class="title">Predicción de Incidentes Delictivos en Guayaquil</span>
+        <span class="badge-dashboard">Dashboard</span>
+      </div>
+    </div>
+    <p class="subtitle">
+      Predicción generada con aprendizaje automático y analítica geoespacial para la toma de decisiones.
+    </p>
+    <div class="avatar user">JD</div>
+  </header>
+
+  <!-- ── BODY ── -->
+  <div class="body">
+
+    <!-- BACKDROP DEL CAJÓN (solo móvil) -->
+    <div class="drawer-backdrop" [class.show]="filtrosAbiertos" (click)="cerrarFiltros()"></div>
+
+    <!-- LEFT SIDEBAR (cajón deslizable en móvil) -->
+    <aside class="sidebar" [class.open]="filtrosAbiertos">
+      <div class="drawer-head">
+        <span>Filtros</span>
+        <button class="drawer-close" (click)="cerrarFiltros()" aria-label="Cerrar filtros">✕</button>
+      </div>
+      <app-sidebar
+        [options]="options"
+        [focusedZone]="focusedZone"
+        [loading]="loading"
+        (filterChange)="onFilterChange($event)"
+        (clearMap)="onClear()">
+      </app-sidebar>
+    </aside>
+
+    <!-- CENTER: MAPA → GRÁFICAS → CUADROS → TABLA -->
+    <main class="center">
+
+      <!-- 1 · MAPA (tamaño fijo) -->
+      <section class="map-container">
+        @if (loading) {
+          <div class="overlay">
+            <div class="spinner"></div>
+            <span>Calculando predicciones…</span>
+          </div>
+        }
+        @if (errorMsg) {
+          <div class="overlay err">{{ errorMsg }}</div>
+        }
+        @if (noData && !errorMsg) {
+          <div class="overlay nodata">
+            No hay datos disponibles para los filtros seleccionados.
+          </div>
+        }
+        <app-map
+          [zones]="zones"
+          [predictions]="predictions"
+          (zoneFocused)="onZoneFocused($event)">
+        </app-map>
+      </section>
+
+      <!-- AVISO DE ZONA RURAL -->
+      @if (hasRuralZones && !loading) {
+        <div class="rural-notice">
+          <span class="rn-icon">🏝️</span>
+          <span>
+            Esta selección incluye <b>parroquias rurales del cantón Guayaquil</b>
+            ({{ ruralZoneNames }}), distantes del núcleo urbano. El mapa se ajusta para mostrarlas.
+          </span>
+        </div>
+      }
+
+      <!-- 2 · GRÁFICAS PRINCIPALES -->
+      <section class="charts-container">
+        <app-charts
+          [hourly]="hourly"
+          [byGravedad]="byGravedad"
+          [selectedHora]="selectedHora"
+          [hasQueried]="hasQueried">
+        </app-charts>
+      </section>
+
+      <!-- 3 · CUADROS DE RESUMEN (movidos abajo) -->
+      <section class="summary-container">
+        <app-summary-cards
+          [predictions]="predictions"
+          [hasQueried]="hasQueried">
+        </app-summary-cards>
+      </section>
+
+      <!-- 4 · TABLA: 10 DELITOS MÁS FRECUENTES -->
+      <section class="table-container">
+        <app-top-delitos
+          [data]="topDelitos"
+          [loading]="topLoading">
+        </app-top-delitos>
+      </section>
+
+    </main>
+  </div>
+</div>

@@ -1,0 +1,148 @@
+.td-card {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 16px 18px 8px;
+  margin: 0 14px 16px;
+}
+
+.td-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+}
+.td-sub {
+  display: block;
+  font-size: 10.5px;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+.td-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: #93c5fd;
+  background: #1e3a5f;
+  border: 1px solid #2563eb55;
+  border-radius: 20px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+/* ── TABLA ── */
+.td-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.td-table {
+  width: 100%;
+  min-width: 560px;          /* en pantallas estrechas habilita scroll horizontal limpio */
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.td-table thead th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  padding: 8px 12px;
+  border-bottom: 1px solid #1e293b;
+  white-space: nowrap;
+}
+
+.td-table tbody td {
+  padding: 11px 12px;
+  border-bottom: 1px solid #161f31;
+  vertical-align: middle;
+}
+.td-table tbody tr:last-child td { border-bottom: none; }
+.td-table tbody tr:hover { background: #0f172a; }
+
+.col-rank { width: 42px; }
+.col-freq, .col-pct { text-align: center; white-space: nowrap; }
+/* el encabezado por defecto va a la izquierda; lo centramos para que coincida con los datos */
+.td-table thead th.col-freq,
+.td-table thead th.col-pct { text-align: center; }
+.col-distrito { white-space: nowrap; }
+
+/* Rank */
+.rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 7px;
+  background: #1e293b;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+}
+.rank.top3 { background: #1d4ed8; color: #dbeafe; }
+
+/* Delito + barra de frecuencia relativa */
+.delito-name {
+  display: block;
+  color: #e2e8f0;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.freq-bar {
+  background: #1e293b;
+  border-radius: 3px;
+  height: 5px;
+  overflow: hidden;
+  max-width: 320px;
+}
+.freq-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  transition: width 0.5s ease;
+}
+
+.col-freq { color: #cbd5e1; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.distrito-chip {
+  display: inline-block;
+  font-size: 11px;
+  color: #cbd5e1;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 3px 9px;
+}
+
+.pct-val {
+  font-weight: 700;
+  color: #818cf8;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── VACÍO / CARGANDO (#7) ── */
+.td-empty {
+  text-align: center;
+  padding: 32px 20px;
+  font-size: 12px;
+  color: #64748b;
+  background: #0f172a;
+  border: 1px dashed #1e293b;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+/* ── RESPONSIVO ── */
+@media (max-width: 480px) {
+  .td-card { margin: 0 10px 14px; padding: 14px 12px 6px; }
+  .td-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+}

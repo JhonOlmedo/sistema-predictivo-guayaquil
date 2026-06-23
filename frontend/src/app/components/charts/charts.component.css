@@ -1,0 +1,211 @@
+.charts-row {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 14px;
+  padding: 14px;
+  box-sizing: border-box;
+}
+
+/* ── TARJETA BASE ── */
+.chart-card {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.card-head { margin-bottom: 14px; }
+
+h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.card-sub {
+  display: block;
+  font-size: 10.5px;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+/* ── HORAS MÁS PELIGROSAS ── */
+.hours-body {
+  display: grid;
+  grid-template-columns: 1fr 168px;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.chart-wrap {
+  position: relative;
+  min-height: 220px;
+  min-width: 0;
+}
+
+/* Cuadro de hora pico (#6) */
+.peak-box {
+  background: linear-gradient(160deg, #1e1b4b 0%, #172033 100%);
+  border: 1px solid #312e81;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+}
+
+.peak-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a5b4fc;
+}
+
+.peak-hour {
+  font-size: 18px;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.1;
+}
+
+.peak-meter {
+  background: #0b1120;
+  border-radius: 5px;
+  height: 7px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.peak-fill {
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #6366f1, #ef4444);
+  transition: width 0.5s ease;
+}
+
+.peak-pct {
+  font-size: 22px;
+  font-weight: 800;
+  color: #818cf8;
+  line-height: 1;
+}
+
+.peak-note {
+  font-size: 10.5px;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+/* ── DISTRIBUCIÓN DE RIESGO — TARJETAS (#5) ── */
+.risk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+}
+
+.risk-tile {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-left: 3px solid var(--c);
+  border-radius: 10px;
+  padding: 12px 13px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "dot name name"
+    "count count unit"
+    "bar bar bar"
+    "pct pct pct";
+  align-items: center;
+  gap: 4px 6px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.risk-tile.muted { opacity: 0.55; }
+
+.risk-dot {
+  grid-area: dot;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--c);
+}
+.risk-name {
+  grid-area: name;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+.risk-count {
+  grid-area: count;
+  font-size: 26px;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1;
+}
+.risk-unit {
+  grid-area: unit;
+  font-size: 10px;
+  color: #64748b;
+  align-self: end;
+  padding-bottom: 2px;
+}
+.risk-bar {
+  grid-area: bar;
+  background: #1e293b;
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.risk-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--c);
+  transition: width 0.5s ease;
+}
+.risk-pct {
+  grid-area: pct;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c);
+  margin-top: 2px;
+}
+
+/* ── ESTADO VACÍO (#7) ── */
+.empty-state {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+  background: #0f172a;
+  border: 1px dashed #1e293b;
+  border-radius: 10px;
+}
+
+/* ── RESPONSIVO ── */
+@media (max-width: 1100px) {
+  .charts-row { grid-template-columns: 1fr; }
+  .hours-body { grid-template-columns: 1fr; }
+  .peak-box { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+  .peak-note { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .charts-row { padding: 12px 10px; gap: 12px; }
+  .chart-card { padding: 14px 13px; }
+  .chart-wrap { min-height: 190px; }
+}

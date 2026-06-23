@@ -1,0 +1,52 @@
+<div class="td-card">
+
+  <div class="td-head">
+    <div>
+      <h4>10 delitos más frecuentes</h4>
+      <span class="td-sub">
+        @if (hasData) {
+          Distribución histórica · {{ total | number }} registros en la selección
+        } @else {
+          Ranking histórico de incidencias por tipo de delito
+        }
+      </span>
+    </div>
+    <span class="td-badge">Datos 2019–2025</span>
+  </div>
+
+  @if (loading) {
+    <div class="td-empty">Calculando…</div>
+  } @else if (!hasData) {
+    <div class="td-empty">No hay datos disponibles para los filtros seleccionados.</div>
+  } @else {
+    <div class="td-table-wrap">
+      <table class="td-table">
+        <thead>
+          <tr>
+            <th class="col-rank">#</th>
+            <th class="col-delito">Delito</th>
+            <th class="col-freq">Frecuencia</th>
+            <th class="col-distrito">Distrito predominante</th>
+            <th class="col-pct">% del total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (it of items; track it.delito; let i = $index) {
+            <tr>
+              <td class="col-rank"><span class="rank" [class.top3]="i < 3">{{ i + 1 }}</span></td>
+              <td class="col-delito">
+                <span class="delito-name">{{ it.delito }}</span>
+                <div class="freq-bar"><div class="freq-fill" [style.width.%]="barWidth(it.frecuencia)"></div></div>
+              </td>
+              <td class="col-freq">{{ it.frecuencia | number }}</td>
+              <td class="col-distrito"><span class="distrito-chip">{{ it.distrito_predominante }}</span></td>
+              <td class="col-pct">
+                <span class="pct-val">{{ it.porcentaje }} %</span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

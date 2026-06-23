@@ -1,0 +1,31 @@
+# Dependencias
+frontend/node_modules/
+
+# Builds (se regeneran dentro del contenedor)
+frontend/dist/
+frontend/.angular/
+backend/static/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Backups de datos (el .csv.bak de 37 MB NO debe subirse)
+*.bak
+
+# Entorno y secretos
+.env
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Archivos internos que no forman parte del Space
+.claude/
+CLAUDE.md
+*.docx

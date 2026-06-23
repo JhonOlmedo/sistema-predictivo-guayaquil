@@ -1,0 +1,141 @@
+.panel {
+  padding: 16px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.panel-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  margin: 0 0 12px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #475569;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.zone-badge {
+  background: #1e293b;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+}
+
+.zone-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.zone-code {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.field { margin-bottom: 10px; }
+
+.field-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.field-row .field { flex: 1; margin-bottom: 0; }
+
+label {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+select, input[type="number"] {
+  width: 100%;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: #f1f5f9;
+  padding: 6px 8px;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+select:focus, input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.btn-predict {
+  width: 100%;
+  background: #7c3aed;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 4px;
+}
+
+.btn-predict:hover:not(:disabled) { background: #6d28d9; }
+.btn-predict:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.error {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 8px;
+}
+
+.result {
+  margin-top: 14px;
+}
+
+.gravedad-badge {
+  display: inline-block;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.peligrosidad-label {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin-bottom: 6px;
+}
+
+.bar-bg {
+  background: #1e293b;
+  border-radius: 4px;
+  height: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.probas {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.proba-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #94a3b8;
+}

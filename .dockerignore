@@ -1,0 +1,17 @@
+# No enviar al contexto de build cosas pesadas o regenerables
+**/node_modules
+**/__pycache__
+**/*.pyc
+**/dist
+frontend/.angular
+backend/static
+
+# Backups de datos (el .csv.bak de 37 MB NO debe ir en la imagen)
+*.bak
+backend/data/*.bak
+
+# Git y metadatos
+.git
+.gitignore
+.vscode
+.idea

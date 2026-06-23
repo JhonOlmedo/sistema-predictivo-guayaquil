@@ -1,0 +1,62 @@
+<div class="panel">
+  <h3 class="panel-title">Parámetros</h3>
+
+  <div class="field">
+    <label>Hora: <b>{{ hora }}:00</b></label>
+    <input type="range" min="0" max="23" step="1" [(ngModel)]="hora" class="slider">
+    <div class="hour-marks">
+      <span>0</span><span>6</span><span>12</span><span>18</span><span>23</span>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Día</label>
+      <select [(ngModel)]="dia_semana" (ngModelChange)="onDiaChange()">
+        @for (d of diasSemana; track $index) {
+          <option [value]="$index">{{ d }}</option>
+        }
+      </select>
+    </div>
+    <div class="field">
+      <label>Mes</label>
+      <select [(ngModel)]="mes">
+        @for (m of meses; track $index) {
+          <option [value]="$index + 1">{{ m }}</option>
+        }
+      </select>
+    </div>
+    <div class="field">
+      <label>Año</label>
+      <select [(ngModel)]="anio">
+        @for (y of [2024, 2025, 2026]; track y) {
+          <option [value]="y">{{ y }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Tipo de lugar</label>
+    <select [(ngModel)]="macro_lugar">
+      @for (entry of macroLugarLabel | keyvalue; track entry.key) {
+        <option [value]="entry.key">{{ entry.value }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Tipo de delito (ICCS)</label>
+    @if (metadata) {
+      <select [(ngModel)]="codigo_iccs">
+        @for (code of metadata.codigo_iccs; track code) {
+          <option [value]="code">{{ code }}</option>
+        }
+      </select>
+    } @else {
+      <input [(ngModel)]="codigo_iccs" placeholder="020510.00">
+    }
+  </div>
+
+  <button class="btn-apply" (click)="apply()">Actualizar mapa</button>
+</div>

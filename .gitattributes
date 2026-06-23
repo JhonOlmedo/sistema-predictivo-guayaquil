@@ -1,0 +1,4 @@
+# Hugging Face / GitHub usan Git LFS para archivos grandes.
+# El CSV histórico del MDI (~37 MB) y los modelos van por LFS.
+*.csv filter=lfs diff=lfs merge=lfs -text
+*.pkl filter=lfs diff=lfs merge=lfs -text

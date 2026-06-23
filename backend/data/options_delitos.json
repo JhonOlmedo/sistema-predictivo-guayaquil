@@ -1,0 +1,158 @@
+[
+  {
+    "label": "Tráfico de estupefacientes",
+    "value": "60124.01"
+  },
+  {
+    "label": "Robo / Hurto",
+    "value": "40121.03"
+  },
+  {
+    "label": "Seguridad pública",
+    "value": "90111.03"
+  },
+  {
+    "label": "Violencia intrafamiliar",
+    "value": "20111.11"
+  },
+  {
+    "label": "Delitos contra la administración pública",
+    "value": "80900.02"
+  },
+  {
+    "label": "Delitos contra la justicia",
+    "value": "80690.02"
+  },
+  {
+    "label": "Secuestro / Privación de libertad",
+    "value": "20221.02"
+  },
+  {
+    "label": "Homicidio",
+    "value": "10102.01"
+  },
+  {
+    "label": "Terrorismo",
+    "value": "90510.03"
+  },
+  {
+    "label": "Contravención",
+    "value": "50290.01"
+  },
+  {
+    "label": "Falsificación y fraude",
+    "value": "70231.03"
+  },
+  {
+    "label": "Delito sexual",
+    "value": "30121.0"
+  },
+  {
+    "label": "Delitos contra la intimidad",
+    "value": "50900.05"
+  },
+  {
+    "label": "Delitos contra la identidad",
+    "value": "70190.12"
+  },
+  {
+    "label": "Lesiones y agresiones",
+    "value": "20121.0"
+  },
+  {
+    "label": "Crimen de lesa humanidad",
+    "value": "110160.0"
+  },
+  {
+    "label": "Delitos aduaneros",
+    "value": "80440.01"
+  },
+  {
+    "label": "Delitos contra la salud",
+    "value": "20710.03"
+  },
+  {
+    "label": "Delitos monetarios",
+    "value": "70212.02"
+  },
+  {
+    "label": "Delitos contra derechos políticos",
+    "value": "80790.02"
+  },
+  {
+    "label": "Delitos contra el trabajo",
+    "value": "80410.05"
+  },
+  {
+    "label": "Delitos contra la biodiversidad",
+    "value": "100410.03"
+  },
+  {
+    "label": "Delitos económicos",
+    "value": "80420.15"
+  },
+  {
+    "label": "Infracción",
+    "value": "20630.02"
+  },
+  {
+    "label": "Delitos en conflicto armado",
+    "value": "110132.02"
+  },
+  {
+    "label": "Trata de personas",
+    "value": "20410.0"
+  },
+  {
+    "label": "Explotación",
+    "value": "30221.01"
+  },
+  {
+    "label": "Delitos financieros",
+    "value": "70190.03"
+  },
+  {
+    "label": "Delito contra el honor",
+    "value": "20910.01"
+  },
+  {
+    "label": "Delitos mineros",
+    "value": "100430.01"
+  },
+  {
+    "label": "Delitos de migración",
+    "value": "80510.02"
+  },
+  {
+    "label": "Seguridad informática",
+    "value": "90310.01"
+  },
+  {
+    "label": "Delitos contra la cultura",
+    "value": "70420.0"
+  },
+  {
+    "label": "Delitos contra el desarrollo",
+    "value": "80410.02"
+  },
+  {
+    "label": "Contravención de tránsito",
+    "value": "90700.06"
+  },
+  {
+    "label": "Delitos contra consumidores",
+    "value": "80430.0"
+  },
+  {
+    "label": "Delitos ambientales",
+    "value": "100120.0"
+  },
+  {
+    "label": "Discriminación",
+    "value": "21010.0"
+  },
+  {
+    "label": "Contravención laboral",
+    "value": "80820.03"
+  }
+]

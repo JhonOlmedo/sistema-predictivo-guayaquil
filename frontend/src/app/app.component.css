@@ -1,0 +1,260 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #0b1120;
+  color: #f1f5f9;
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow: hidden;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  height: 54px;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  flex-shrink: 0;
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: #1d4ed8;
+  color: #bfdbfe;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar.user {
+  background: #1e293b;
+  color: #64748b;
+  margin-left: auto;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-right: 8px;
+}
+
+.badge-dashboard {
+  background: #1e3a5f;
+  color: #93c5fd;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid #2563eb55;
+}
+
+.subtitle {
+  font-size: 10px;
+  color: #475569;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Controles solo-móvil: ocultos en escritorio */
+.filtros-toggle,
+.drawer-backdrop,
+.drawer-head { display: none; }
+
+/* ── BODY ── */
+.body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #0f172a;
+  border-right: 1px solid #1e293b;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+/* ── CENTER (columna desplazable: mapa → gráficas → cuadros → tabla) ── */
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+/* ── MAP (tamaño FIJO: nunca crece con el contenido, solo hace zoom) ── */
+.map-container {
+  height: clamp(380px, 52vh, 560px);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 500;
+  background: rgba(11, 17, 32, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.overlay.err {
+  background: rgba(127, 29, 29, 0.82);
+  color: #fca5a5;
+  text-align: center;
+  padding: 24px;
+}
+
+.overlay.nodata {
+  background: rgba(11, 17, 32, 0.85);
+  color: #cbd5e1;
+  text-align: center;
+  padding: 24px;
+  font-size: 13px;
+}
+
+.spinner {
+  width: 22px; height: 22px;
+  border: 2px solid #1e293b;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── AVISO DE ZONA RURAL ── */
+.rural-notice {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 14px 0;
+  padding: 10px 14px;
+  background: #1c1407;
+  border: 1px solid #a16207;
+  border-left: 3px solid #f59e0b;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #fde68a;
+  line-height: 1.45;
+}
+.rural-notice .rn-icon { font-size: 16px; flex-shrink: 0; }
+.rural-notice b { color: #fbbf24; }
+
+/* ── CHARTS (altura por contenido) ── */
+.charts-container {
+  flex-shrink: 0;
+  background: #0b1120;
+  border-top: 1px solid #1e293b;
+}
+
+/* ── CUADROS DE RESUMEN (movidos abajo) ── */
+.summary-container {
+  flex-shrink: 0;
+  background: #0b1120;
+}
+
+/* ── TABLA TOP-10 ── */
+.table-container {
+  flex-shrink: 0;
+  background: #0b1120;
+}
+
+/* ═══════════════════ RESPONSIVO (≤ 900 px: tablet / móvil) ═══════════════════ */
+@media (max-width: 900px) {
+
+  /* — Cabecera compacta con botón de filtros — */
+  .topbar { gap: 10px; padding: 0 12px; }
+  .filtros-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; flex-shrink: 0; padding: 0;
+    background: #1e293b; border: 1px solid #334155; border-radius: 9px;
+    color: #cbd5e1; cursor: pointer;
+  }
+  .filtros-toggle svg { width: 20px; height: 20px; }
+  .filtros-toggle:hover { background: #334155; }
+  .subtitle { display: none; }
+  .brand-left .avatar { display: none; }          /* el ☰ ocupa su lugar */
+  .brand-left { flex: 1; min-width: 0; }
+  .brand-left > div { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .title {
+    font-size: 12px; margin-right: 0; min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .badge-dashboard { flex-shrink: 0; }
+
+  /* — Sidebar → cajón deslizable — */
+  .sidebar {
+    position: fixed; top: 54px; left: 0;
+    height: calc(100% - 54px);
+    width: 280px; max-width: 84vw;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 1200;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar app-sidebar { height: auto; overflow: visible; }   /* el cajón es el único scroll */
+
+  .drawer-head {
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 1;
+    padding: 12px 14px;
+    background: #0f172a; border-bottom: 1px solid #1e293b;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #94a3b8;
+  }
+  .drawer-close {
+    background: none; border: none; color: #94a3b8;
+    font-size: 16px; line-height: 1; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 6px;
+  }
+  .drawer-close:hover { background: #1e293b; color: #f1f5f9; }
+
+  /* — Backdrop — */
+  .drawer-backdrop {
+    display: block; position: fixed; inset: 54px 0 0 0;
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease; z-index: 1100;
+  }
+  .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+
+  /* — Centro a ancho completo; mapa un poco más bajo — */
+  .center { width: 100%; }
+  .map-container { height: clamp(300px, 44vh, 440px); }
+}
+
+/* ═══════════════════ RESPONSIVO (≤ 480 px: móvil pequeño) ═══════════════════ */
+@media (max-width: 480px) {
+  .topbar { gap: 8px; padding: 0 10px; }
+  .title { font-size: 11px; }
+  .badge-dashboard { display: none; }
+  .map-container { height: clamp(260px, 40vh, 360px); }
+  .rural-notice { margin: 10px 10px 0; padding: 9px 12px; font-size: 11px; }
+}

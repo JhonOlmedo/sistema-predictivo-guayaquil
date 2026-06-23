@@ -1,0 +1,59 @@
+<div class="charts-row">
+
+  <!-- ── HORAS MÁS PELIGROSAS + CUADRO DE HORA PICO (#3 #6) ── -->
+  <div class="chart-card hours-card">
+    <div class="card-head">
+      <h4>Horas más peligrosas</h4>
+      <span class="card-sub">Peligrosidad promedio por franja horaria (0–100 %)</span>
+    </div>
+
+    <!-- El canvas permanece siempre en el DOM; se oculta sin datos -->
+    <div class="hours-body" [style.display]="hasHourly ? 'grid' : 'none'">
+      <div class="chart-wrap"><canvas #barCanvas></canvas></div>
+
+      <aside class="peak-box">
+        <span class="peak-tag">Hora más peligrosa</span>
+        <span class="peak-hour">{{ peakHourLabel }}</span>
+        <div class="peak-meter">
+          <div class="peak-fill" [style.width.%]="peakPct"></div>
+        </div>
+        <span class="peak-pct">{{ peakPct }} %</span>
+        <span class="peak-note">
+          Franja horaria con mayor concentración de riesgo según los datos consultados.
+        </span>
+      </aside>
+    </div>
+
+    @if (!hasHourly) {
+      <div class="empty-state">{{ emptyMsg }}</div>
+    }
+  </div>
+
+  <!-- ── DISTRIBUCIÓN DE RIESGO POR NIVEL — TARJETAS (#5) ── -->
+  <div class="chart-card risk-card">
+    <div class="card-head">
+      <h4>Distribución de riesgo por nivel</h4>
+      <span class="card-sub">
+        @if (hasGravedad) { {{ riskTotal }} zonas evaluadas } @else { Niveles de gravedad }
+      </span>
+    </div>
+
+    @if (hasGravedad) {
+      <div class="risk-grid">
+        @for (lvl of riskLevels; track lvl.key) {
+          <div class="risk-tile" [class.muted]="lvl.count === 0" [style.--c]="lvl.color">
+            <span class="risk-dot"></span>
+            <span class="risk-name">{{ lvl.name }}</span>
+            <span class="risk-count">{{ lvl.count }}</span>
+            <span class="risk-unit">zonas</span>
+            <div class="risk-bar"><div class="risk-fill" [style.width.%]="lvl.pct"></div></div>
+            <span class="risk-pct">{{ lvl.pct }} %</span>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">{{ emptyMsg }}</div>
+    }
+  </div>
+
+</div>
