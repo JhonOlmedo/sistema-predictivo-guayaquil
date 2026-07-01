@@ -46,10 +46,12 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   private static readonly GRAVEDAD_COLORS: Record<string, string> = {
     BAJA: '#22c55e', MEDIA: '#eab308', ALTA: '#f97316', CRITICA: '#ef4444',
   };
-  // A partir de este zoom los puntos por zona pasan de invisibles a visibles.
-  // Por debajo (vista general y de distrito) solo manda el mapa de calor; los
-  // puntos aparecen recién al acercar bastante (nivel de calle).
-  private static readonly POINT_ZOOM = 15;
+  // Zoom a partir del cual los puntos por zona pasan de invisibles a visibles.
+  // Por debajo solo manda el mapa de calor. En móvil (puntero táctil) aparecen dos
+  // niveles antes (13) que en PC (15), porque la pantalla es más pequeña.
+  private get pointZoom(): number {
+    return this.coarsePointer ? 13 : 15;
+  }
 
   async ngAfterViewInit(): Promise<void> {
     this.map = L.map(this.mapEl.nativeElement, {
@@ -196,16 +198,16 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   /** Estilo del punto de una zona según el zoom:
-   *  - Vista general (zoom < POINT_ZOOM): INVISIBLE, pero con radio + la tolerancia
+   *  - Vista general (zoom < pointZoom): INVISIBLE, pero con radio + la tolerancia
    *    del canvas mantiene un objetivo de toque amplio (solo se ve el calor).
    *  - Al acercar: punto DISCRETO (pequeño) con borde blanco para resaltar sobre
    *    el calor sin taparlo. */
   private markerStyleForZoom(zoom: number, gravedad: string): L.CircleMarkerOptions {
     const fillColor = MapComponent.GRAVEDAD_COLORS[gravedad] ?? '#64748b';
-    if (zoom < MapComponent.POINT_ZOOM) {
+    if (zoom < this.pointZoom) {
       return { radius: this.coarsePointer ? 10 : 8, opacity: 0, fillOpacity: 0, fillColor, color: fillColor };
     }
-    const radius = Math.min((this.coarsePointer ? 5 : 4) + (zoom - MapComponent.POINT_ZOOM), this.coarsePointer ? 9 : 7);
+    const radius = Math.min((this.coarsePointer ? 5 : 4) + (zoom - this.pointZoom), this.coarsePointer ? 9 : 7);
     return { radius, fillColor, fillOpacity: 0.9, color: '#ffffff', weight: 1.5, opacity: 0.9 };
   }
 
