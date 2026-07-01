@@ -22,6 +22,13 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   private predMap = new Map<string, ZonePrediction>();
   private ready = false;
   private resizeObs?: ResizeObserver;
+  // Renderer de canvas compartido por los 240 círculos: su `tolerance` amplía el
+  // área de acierto del tap (clave en móvil, donde el dedo no cae exacto en el punto).
+  private markerRenderer!: L.Canvas;
+  // Puntero grueso = pantalla táctil: usamos objetivos y tolerancia más grandes.
+  private readonly coarsePointer =
+    typeof window !== 'undefined' && !!window.matchMedia &&
+    window.matchMedia('(pointer: coarse)').matches;
 
   // Centro inicial (vista general al arrancar / al limpiar)
   private static readonly CENTER: [number, number] = [-2.1894, -79.8891];
@@ -35,6 +42,14 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   private static readonly MAX_BOUNDS = L.latLngBounds(
     [-3.35, -80.85], [-1.65, -79.15],
   );
+  // Colores por nivel de gravedad, compartidos por los puntos del mapa y el popup.
+  private static readonly GRAVEDAD_COLORS: Record<string, string> = {
+    BAJA: '#22c55e', MEDIA: '#eab308', ALTA: '#f97316', CRITICA: '#ef4444',
+  };
+  // A partir de este zoom los puntos por zona pasan de invisibles a visibles.
+  // Por debajo (vista general y de distrito) solo manda el mapa de calor; los
+  // puntos aparecen recién al acercar bastante (nivel de calle).
+  private static readonly POINT_ZOOM = 15;
 
   async ngAfterViewInit(): Promise<void> {
     this.map = L.map(this.mapEl.nativeElement, {
@@ -55,6 +70,13 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     // ante cualquier reflujo del layout recalcula su tamaño en vez de deformarse.
     this.resizeObs = new ResizeObserver(() => this.map?.invalidateSize());
     this.resizeObs.observe(this.mapEl.nativeElement);
+
+    // Un único canvas para los marcadores de zona. `tolerance` amplía el área de
+    // acierto del tap por encima del radio visible (clave en móvil).
+    this.markerRenderer = L.canvas({ tolerance: this.coarsePointer ? 14 : 8 });
+    // En cada cambio de zoom ajustamos el radio del calor (para que no se disuelva)
+    // y el estilo de los puntos (invisibles en vista general, visibles al acercar).
+    this.map.on('zoomend', () => this.onZoomEnd());
 
     // leaflet.heat es un plugin UMD legado que registra `L.heatLayer` sobre la
     // variable global `window.L`. En el build de producción (esbuild) Leaflet no
@@ -124,30 +146,37 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     ]);
 
     if (heatPoints.length) {
+      // El mapa de calor es la lectura PRINCIPAL a todos los zooms. Opacidad alta y
+      // degradado en la paleta de gravedad para que se note; el radio se ajusta al
+      // zoom (heatOptionsForZoom) para que la mancha no se disuelva al acercar.
       this.heatLayer = (L as any).heatLayer(heatPoints, {
-        radius: 30,
-        blur: 25,
+        ...this.heatOptionsForZoom(this.map.getZoom()),
         maxZoom: 17,
-        max: 1.0,
-        minOpacity: 0.35,
-        gradient: { 0.2: '#3b82f6', 0.45: '#eab308', 0.7: '#f97316', 1.0: '#ef4444' },
+        max: 0.7,
+        minOpacity: 0.4,
+        gradient: { 0.2: '#22c55e', 0.5: '#eab308', 0.75: '#f97316', 1.0: '#ef4444' },
       });
       this.heatLayer!.addTo(this.map);
+      this.disableHeatPointerEvents();
     }
 
+    // Un marcador por subcircuito. En vista general es INVISIBLE (solo manda el
+    // calor) pero mantiene un área de toque generosa; al acercar el zoom se vuelve
+    // un punto DISCRETO. El estilo lo decide markerStyleForZoom según el zoom.
+    const zoom = this.map.getZoom();
     this.predictions.forEach(pred => {
       const zone = this.zones.find(z => z.codigo_subcircuito === pred.codigo_subcircuito);
       const marker = L.circleMarker([pred.lat, pred.lng], {
-        radius: 11,
-        fillOpacity: 0,
-        opacity: 0,
+        renderer: this.markerRenderer,
         interactive: true,
+        ...this.markerStyleForZoom(zoom, pred.gravedad),
       });
       marker.on('mouseover', () => this.zoneFocused.emit(pred));
       marker.on('mouseout', () => this.zoneFocused.emit(null));
       marker.on('click', () => this.zoneFocused.emit(pred));   // tap en móvil: fija el detalle
       marker.bindPopup(this.buildPopup(pred, zone));
       marker.addTo(this.map);
+      (marker as unknown as { _gravedad: string })._gravedad = pred.gravedad;
       this.interactionMarkers.push(marker);
     });
   }
@@ -158,11 +187,55 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.interactionMarkers = [];
   }
 
+  /** Radio/desenfoque (px) del mapa de calor según el zoom. El radio CRECE al
+   *  acercar para que la mancha siga siendo continua y visible en vez de
+   *  disolverse en puntitos sueltos (que era el motivo de que "no se notara"). */
+  private heatOptionsForZoom(zoom: number): { radius: number; blur: number } {
+    const radius = Math.min(18 + Math.max(0, zoom - 11) * 7, 60);
+    return { radius, blur: Math.round(radius * 0.75) };
+  }
+
+  /** Estilo del punto de una zona según el zoom:
+   *  - Vista general (zoom < POINT_ZOOM): INVISIBLE, pero con radio + la tolerancia
+   *    del canvas mantiene un objetivo de toque amplio (solo se ve el calor).
+   *  - Al acercar: punto DISCRETO (pequeño) con borde blanco para resaltar sobre
+   *    el calor sin taparlo. */
+  private markerStyleForZoom(zoom: number, gravedad: string): L.CircleMarkerOptions {
+    const fillColor = MapComponent.GRAVEDAD_COLORS[gravedad] ?? '#64748b';
+    if (zoom < MapComponent.POINT_ZOOM) {
+      return { radius: this.coarsePointer ? 10 : 8, opacity: 0, fillOpacity: 0, fillColor, color: fillColor };
+    }
+    const radius = Math.min((this.coarsePointer ? 5 : 4) + (zoom - MapComponent.POINT_ZOOM), this.coarsePointer ? 9 : 7);
+    return { radius, fillColor, fillOpacity: 0.9, color: '#ffffff', weight: 1.5, opacity: 0.9 };
+  }
+
+  /** En cada cambio de zoom: ajusta el radio del calor y re-estiliza los puntos
+   *  (invisibles ↔ visibles y discretos). */
+  private onZoomEnd(): void {
+    if (!this.ready) return;
+    const zoom = this.map.getZoom();
+    if (this.heatLayer) {
+      (this.heatLayer as unknown as { setOptions?: (o: object) => void })
+        .setOptions?.(this.heatOptionsForZoom(zoom));
+      this.disableHeatPointerEvents();
+    }
+    this.interactionMarkers.forEach(m => {
+      const st = this.markerStyleForZoom(zoom, (m as unknown as { _gravedad: string })._gravedad);
+      m.setStyle(st);
+      if (st.radius != null) m.setRadius(st.radius);
+    });
+  }
+
+  /** El canvas del calor es decorativo y NUNCA debe capturar clics: leaflet.heat lo
+   *  reinserta ENCIMA del canvas de puntos en cada render, así que sin esto se
+   *  tragaría los taps dirigidos a las zonas de abajo. */
+  private disableHeatPointerEvents(): void {
+    const c = (this.heatLayer as unknown as { _canvas?: HTMLCanvasElement })._canvas;
+    if (c) c.style.pointerEvents = 'none';
+  }
+
   private buildPopup(p: ZonePrediction, z: Zone | undefined): string {
-    const colors: Record<string, string> = {
-      BAJA: '#22c55e', MEDIA: '#eab308', ALTA: '#f97316', CRITICA: '#ef4444',
-    };
-    const c = colors[p.gravedad] ?? '#64748b';
+    const c = MapComponent.GRAVEDAD_COLORS[p.gravedad] ?? '#64748b';
     const parroquia = p.parroquia
       ? `<small style="color:#cbd5e1">📍 ${p.parroquia}${p.es_rural
           ? ' <span style="background:#3f2d12;color:#fbbf24;border-radius:4px;padding:0 5px;font-size:10px">Zona rural</span>'
