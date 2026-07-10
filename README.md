@@ -1,13 +1,3 @@
----
-title: Sistema Predictivo de Incidentes - Guayaquil
-emoji: 🗺️
-colorFrom: blue
-colorTo: red
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # Sistema Web Geoespacial para la Predicción de Incidentes Delictivos en Guayaquil
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
