@@ -51,6 +51,7 @@ backend/data/*.bak
 # ──────────────────────────────────────────────────────────────
 capturas_figuras/
 capturas_articulo/
+encuestas/
 *.docx
 BITACORA_DESPLIEGUE.md
 
