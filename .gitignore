@@ -1,31 +1,64 @@
-# Dependencias
-frontend/node_modules/
-
-# Builds (se regeneran dentro del contenedor)
-frontend/dist/
-frontend/.angular/
-backend/static/
-
+# ──────────────────────────────────────────────────────────────
 # Python
+# ──────────────────────────────────────────────────────────────
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
 .venv/
 venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Backups de datos (el .csv.bak de 37 MB NO debe subirse)
-*.bak
+# ──────────────────────────────────────────────────────────────
+# Jupyter
+# ──────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
 
-# Entorno y secretos
+# ──────────────────────────────────────────────────────────────
+# Node / Angular (frontend)
+# ──────────────────────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend ya compilado que el backend sirve dentro del contenedor.
+# Se regenera en el build de Docker (etapa Node), no se versiona.
+backend/static/
+
+# ──────────────────────────────────────────────────────────────
+# Secretos y variables de entorno (nunca subir)
+# ──────────────────────────────────────────────────────────────
 .env
+.env.*
+*.env
 
-# Editores / SO
-.vscode/
-.idea/
+# ──────────────────────────────────────────────────────────────
+# Respaldos de datos (el .csv.bak de ~37 MB no debe subirse;
+# el dataset y los modelos válidos sí van, por Git LFS)
+# ──────────────────────────────────────────────────────────────
+*.bak
+backend/data/*.bak
+
+# ──────────────────────────────────────────────────────────────
+# Material del artículo que no forma parte del código ni del despliegue
+# ──────────────────────────────────────────────────────────────
+capturas_figuras/
+capturas_articulo/
+*.docx
+BITACORA_DESPLIEGUE.md
+
+# ──────────────────────────────────────────────────────────────
+# Sistema operativo y editores
+# ──────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
-
-# Archivos internos que no forman parte del Space
-.claude/
-CLAUDE.md
-*.docx
+desktop.ini
+.vscode/
+.idea/

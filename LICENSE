@@ -1,0 +1,29 @@
+Licencia de Uso Académico
+
+Copyright (c) 2026 Jhon Israel Olmedo Olvera y Kenneth Daniel Vera Valenzuela.
+Universidad Politécnica Salesiana, sede Guayaquil, Carrera de Computación.
+
+Este repositorio contiene el código, los modelos y los materiales asociados a un
+trabajo de titulación. Se publica con fines académicos y educativos.
+
+1. Uso permitido
+   Se permite consultar, estudiar, ejecutar y reproducir este software para fines
+   de investigación, docencia y evaluación académica, así como citarlo en trabajos
+   académicos siempre que se atribuya la autoría (ver el apartado de citación del
+   README).
+
+2. Uso no autorizado
+   No se autoriza el uso operativo policial ni la toma de decisiones sobre personas
+   individuales a partir de las salidas del sistema. El modelo estima un nivel de
+   gravedad delictiva agregado por zona a partir de registros de detenciones y
+   aprehensiones, no identifica personas ni predice hechos concretos. Tampoco se
+   autoriza el uso comercial sin permiso escrito de los autores.
+
+3. Datos
+   El conjunto de datos proviene del portal de datos abiertos del Ministerio del
+   Interior del Ecuador y está sujeto a los términos de uso de esa fuente. Su
+   inclusión aquí es para reproducibilidad académica.
+
+4. Sin garantía
+   El software se entrega "tal cual", sin garantía de ningún tipo, expresa o
+   implícita. Los autores no se hacen responsables de daños derivados de su uso.

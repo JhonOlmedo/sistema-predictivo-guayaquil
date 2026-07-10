@@ -22,7 +22,8 @@ Y clasifica:
 
 Uso:
     python validar_coordenadas_mdi.py [ruta_al_xlsx]
-    (por defecto busca C:\\Users\\jhono\\Downloads\\CMI_2019_2022_unificado.xlsx)
+    (por defecto busca CMI_2019_2022_unificado.xlsx en el directorio actual;
+     ese archivo de ground truth no se distribuye con el repositorio)
 """
 from __future__ import annotations
 
@@ -35,7 +36,7 @@ import pandas as pd
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-DEFAULT_XLSX = Path(r"C:\Users\jhono\Downloads\CMI_2019_2022_unificado.xlsx")
+DEFAULT_XLSX = Path("CMI_2019_2022_unificado.xlsx")
 SHEET = "CMI_2019_2022"
 CSV = Path(__file__).resolve().parent.parent / "data" / "subcircuitos.csv"
 
